@@ -587,7 +587,6 @@ static int check_data_auto(struct fi_info *info)
 		EXIT_FAILURE : 0;
 }
 
-
 static int init_domain_caps(struct fi_info *hints, uint64_t caps)
 {
 	hints->domain_attr->caps = caps;
@@ -598,6 +597,343 @@ static int check_domain_caps(struct fi_info *info, uint64_t caps)
 {
 	return check_has_bits(info->domain_attr->caps, caps);
 }
+
+#define TEST_PCI_ADDR "0000:00:00.0"
+#define TEST_CONFIG_FILE "/tmp/verbs_test_config.conf"
+
+static const char *get_nic_name(struct fi_info *info)
+{
+	if (info->nic && info->nic->device_attr && info->nic->device_attr->name)
+		return info->nic->device_attr->name;
+	return NULL;
+}
+
+static int get_arbitrary_nic_name(char *nic_name, size_t len)
+{
+	struct fi_info *info = NULL;
+	int ret;
+
+	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, 0, hints, &info);
+	if (ret) {
+		sprintf(err_buf, "fi_getinfo failed to discover NICs: %s", fi_strerror(-ret));
+		return ret;
+	}
+
+	if (!info) {
+		sprintf(err_buf, "No provider info returned");
+		return -FI_ENODATA;
+	}
+
+	for (struct fi_info *cur = info; cur; cur = cur->next) {
+		const char *name = get_nic_name(cur);
+		if (name) {
+			snprintf(nic_name, len, "%s", name);
+			fi_freeinfo(info);
+			return 0;
+		}
+	}
+
+	fi_freeinfo(info);
+	sprintf(err_buf, "No NIC names found in provider info");
+	return -FI_ENODATA;
+}
+
+static int create_valid_test_config_file(void)
+{
+	FILE *fp;
+	char nic_name[64];
+	int ret;
+
+	ret = get_arbitrary_nic_name(nic_name, sizeof(nic_name));
+	if (ret) return ret;
+
+	fp = fopen(TEST_CONFIG_FILE, "w");
+	if (!fp) {
+		sprintf(err_buf, "Failed to open config file for writing");
+		return -FI_EIO;
+	}
+
+	fprintf(fp, "%s %s\n", TEST_PCI_ADDR, nic_name);
+	fclose(fp);
+
+	return 0;
+}
+
+static int create_invalid_test_config_file(void)
+{
+	FILE *fp;
+
+	fp = fopen(TEST_CONFIG_FILE, "w");
+	if (!fp) {
+		sprintf(err_buf, "Failed to open config file for writing");
+		return -FI_EIO;
+	}
+
+	fprintf(fp, "invalid_config_line\n");
+	fclose(fp);
+
+	return 0;
+}
+
+static void cleanup_verbs_affinity_test(void)
+{
+	unlink(TEST_CONFIG_FILE);
+	unsetenv("FI_VERBS_NIC_AFFINITY_POLICY");
+	unsetenv("FI_VERBS_AFFINITY_DEVICE");
+	unsetenv("FI_VERBS_NIC_AFFINITY_CONFIG");
+}
+
+/*
+ * Verbs GPU/NIC affinity init functions
+ */
+static int init_verbs_affinity_manual(struct fi_info *hints)
+{
+	int ret;
+
+	ret = create_valid_test_config_file();
+	if (ret) return ret;
+
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "manual", 1);
+	setenv("FI_VERBS_NIC_AFFINITY_CONFIG", TEST_CONFIG_FILE, 1);
+	return 0;
+}
+
+static int init_verbs_affinity_manual_no_device(struct fi_info *hints)
+{
+	int ret;
+
+	ret = create_valid_test_config_file();
+	if (ret) return ret;
+
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "manual", 1);
+	setenv("FI_VERBS_NIC_AFFINITY_CONFIG", TEST_CONFIG_FILE, 1);
+	unsetenv("FI_VERBS_AFFINITY_DEVICE");
+	return 0;
+}
+
+static int init_verbs_affinity_manual_invalid_device(struct fi_info *hints)
+{
+	int ret;
+
+	ret = create_valid_test_config_file();
+	if (ret) return ret;
+
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "manual", 1);
+	setenv("FI_VERBS_NIC_AFFINITY_CONFIG", TEST_CONFIG_FILE, 1);
+	setenv("FI_VERBS_AFFINITY_DEVICE", "invalid:pci:format:bad", 1);
+	return 0;
+}
+
+static int init_verbs_affinity_manual_missing_config(struct fi_info *hints)
+{
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "manual", 1);
+	setenv("FI_VERBS_NIC_AFFINITY_CONFIG", "/nonexistent/path/to/config.conf", 1);
+	return 0;
+}
+
+static int init_verbs_affinity_manual_malformed_config(struct fi_info *hints)
+{
+	int ret;
+
+	ret = create_invalid_test_config_file();
+	if (ret) return ret;
+
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "manual", 1);
+	setenv("FI_VERBS_NIC_AFFINITY_CONFIG", TEST_CONFIG_FILE, 1);
+	return 0;
+}
+
+static int init_verbs_affinity_auto(struct fi_info *hints)
+{
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "auto", 1);
+	return 0;
+}
+
+static int init_verbs_affinity_auto_no_device(struct fi_info *hints)
+{
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "auto", 1);
+	unsetenv("FI_VERBS_AFFINITY_DEVICE");
+	return 0;
+}
+
+static int init_verbs_affinity_auto_invalid_device(struct fi_info *hints)
+{
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "auto", 1);
+	setenv("FI_VERBS_AFFINITY_DEVICE", "invalid:pci:format:bad", 1);
+	return 0;
+}
+
+static int init_verbs_affinity_invalid(struct fi_info *hints)
+{
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "invalid_garbage_policy", 1);
+	return 0;
+}
+
+/*
+ * Verbs GPU/NIC affinity check functions
+ */
+static int check_count_and_grouping(struct fi_info *original_info, struct fi_info *policy_info)
+{
+	struct fi_info *original_cur;
+	struct fi_info *affinity_cur;
+	const char *nic_to_find;
+	size_t original_count;
+	size_t policy_count;
+
+	original_cur = original_info;
+	while (original_cur) {
+		nic_to_find = get_nic_name(original_cur);
+		if (!nic_to_find) {
+			original_cur = original_cur->next;
+			continue;
+		}
+
+		original_count = 0;
+		while (original_cur && get_nic_name(original_cur) &&
+		       strcmp(get_nic_name(original_cur), nic_to_find) == 0) {
+			original_count++;
+			original_cur = original_cur->next;
+		}
+
+		for (affinity_cur = policy_info; affinity_cur; affinity_cur = affinity_cur->next) {
+			if (get_nic_name(affinity_cur) &&
+			    strcmp(get_nic_name(affinity_cur), nic_to_find) == 0)
+				break;
+		}
+
+		policy_count = 0;
+		while (affinity_cur && get_nic_name(affinity_cur) &&
+		       strcmp(get_nic_name(affinity_cur), nic_to_find) == 0) {
+			policy_count++;
+			affinity_cur = affinity_cur->next;
+		}
+
+		if (original_count != policy_count) {
+			sprintf(err_buf, "NIC %s: original has %zu entries, policy has %zu consecutive entries",
+				nic_to_find, original_count, policy_count);
+			return EXIT_FAILURE;
+		}
+	}
+
+	return 0;
+}
+
+static int compare_lists_same_order(struct fi_info *list1, struct fi_info *list2)
+{
+	struct fi_info *cur1;
+	struct fi_info *cur2;
+	const char *name1;
+	const char *name2;
+
+	cur1 = list1;
+	cur2 = list2;
+	while (cur1 && cur2) {
+		name1 = get_nic_name(cur1);
+		name2 = get_nic_name(cur2);
+
+		if (name1 && name2 && strcmp(name1, name2) != 0) {
+			sprintf(err_buf, "Order mismatch: %s != %s", name1, name2);
+			return EXIT_FAILURE;
+		}
+
+		cur1 = cur1->next;
+		cur2 = cur2->next;
+	}
+
+	if (cur1 || cur2) {
+		sprintf(err_buf, "Different number of entries");
+		return EXIT_FAILURE;
+	}
+
+	return 0;
+}
+
+static int check_verbs_no_interference(char *node, char *service, uint64_t flags,
+				       struct fi_info *hints, struct fi_info **info)
+{
+	struct fi_info *original_info = NULL;
+	struct fi_info *policy_info1 = NULL;
+	struct fi_info *policy_info2 = NULL;
+	int ret;
+
+	ret = fi_getinfo(FT_FIVERSION, node, service, flags, hints, &policy_info1);
+	if (ret) {
+		FT_UNIT_STRERR(err_buf, "fi_getinfo with affinity policy failed", ret);
+		return ret;
+	}
+
+	ret = fi_getinfo(FT_FIVERSION, node, service, flags, hints, &policy_info2);
+	if (ret) {
+		FT_UNIT_STRERR(err_buf, "fi_getinfo with affinity policy (second call) failed", ret);
+		fi_freeinfo(policy_info1);
+		return ret;
+	}
+
+	// Check consistancy.
+	ret = compare_lists_same_order(policy_info1, policy_info2);
+	if (ret)
+		goto cleanup;
+
+	unsetenv("FI_VERBS_NIC_AFFINITY_POLICY");
+	unsetenv("FI_VERBS_AFFINITY_DEVICE");
+
+	ret = fi_getinfo(FT_FIVERSION, node, service, flags, hints, &original_info);
+	if (ret) {
+		FT_UNIT_STRERR(err_buf, "fi_getinfo with policy=none failed", ret);
+		goto cleanup;
+	}
+
+	// Verify that new list contain every entry from the original list, 
+	// and that entries from the same NIC are grouped together.
+	ret = check_count_and_grouping(original_info, policy_info1);
+
+cleanup:
+	fi_freeinfo(original_info);
+	fi_freeinfo(policy_info1);
+	fi_freeinfo(policy_info2);
+	*info = NULL;
+
+	cleanup_verbs_affinity_test();
+
+	return ret;
+}
+
+static int check_verbs_identical_list(char *node, char *service, uint64_t flags,
+				      struct fi_info *hints, struct fi_info **info)
+{
+	struct fi_info *original_info = NULL;
+	struct fi_info *policy_info = NULL;
+	int ret;
+
+	ret = fi_getinfo(FT_FIVERSION, node, service, flags, hints, &policy_info);
+	if (ret) {
+		FT_UNIT_STRERR(err_buf, "fi_getinfo with affinity policy failed", ret);
+		cleanup_verbs_affinity_test();
+		return ret;
+	}
+
+	unsetenv("FI_VERBS_NIC_AFFINITY_POLICY");
+	unsetenv("FI_VERBS_AFFINITY_DEVICE");
+
+	ret = fi_getinfo(FT_FIVERSION, node, service, flags, hints, &original_info);
+	if (ret) {
+		FT_UNIT_STRERR(err_buf, "fi_getinfo with policy=none failed", ret);
+		fi_freeinfo(policy_info);
+		cleanup_verbs_affinity_test();
+		return ret;
+	}
+
+	ret = compare_lists_same_order(original_info, policy_info);
+
+	fi_freeinfo(original_info);
+	fi_freeinfo(policy_info);
+	*info = NULL;
+
+	cleanup_verbs_affinity_test();
+
+	return ret;
+}
+
 
 static int validate_domain_caps(char *node, char *service, uint64_t flags,
 		struct fi_info *hints, struct fi_info **info)
@@ -825,6 +1161,52 @@ getinfo_test(caps, 3, "Test domain capabilities", NULL, NULL, 0,
 getinfo_test(caps, 4, "Test if either FI_LOCAL_COMM or FI_REMOTE_COMM is set",
 	     NULL, NULL, 0, hints, NULL, test_comm_caps, NULL, 0)
 
+/* Verbs GPU/NIC affinity tests */
+getinfo_test(verbs_gpu_nic_affinity, 1,
+	     "Test verbs manual",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_manual,
+	     check_verbs_no_interference, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 2,
+	     "Test verbs manual without device",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_manual_no_device,
+	     check_verbs_identical_list, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 3,
+	     "Test verbs manual with invalid device",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_manual_invalid_device,
+	     check_verbs_identical_list, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 4,
+	     "Test verbs manual with missing config file",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_manual_missing_config,
+	     check_verbs_identical_list, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 5,
+	     "Test verbs manual with malformed config",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_manual_malformed_config,
+	     check_verbs_identical_list, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 6,
+	     "Test verbs auto",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_auto,
+	     check_verbs_no_interference, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 7,
+	     "Test verbs auto without device",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_auto_no_device,
+	     check_verbs_identical_list, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 8,
+	     "Test verbs auto with invalid device",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_auto_invalid_device,
+	     check_verbs_identical_list, NULL, 0)
+getinfo_test(verbs_gpu_nic_affinity, 9,
+	     "Test verbs invalid fallback to none",
+	     NULL, NULL, 0, hints,
+	     init_verbs_affinity_invalid,
+	     check_verbs_identical_list, NULL, 0)
 
 static void usage(char *name)
 {
@@ -909,6 +1291,19 @@ int main(int argc, char **argv)
 		{ NULL, "" }
 	};
 
+	struct test_entry verbs_gpu_nic_affinity_tests[] = {
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity1),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity2),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity3),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity4),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity5),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity6),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity7),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity8),
+		TEST_ENTRY_GETINFO(verbs_gpu_nic_affinity9),
+		{ NULL, "" }
+	};
+
 	opts = INIT_OPTS;
 
 	hints = fi_allocinfo();
@@ -957,6 +1352,13 @@ int main(int argc, char **argv)
 	}
 
 	failed += run_tests(hint_tests, err_buf);
+
+	if (hints->fabric_attr->prov_name &&
+	    (strstr(hints->fabric_attr->prov_name, "verbs") != NULL)) {
+		setenv("FI_VERBS_AFFINITY_DEVICE", TEST_PCI_ADDR, 1);
+		failed += run_tests(verbs_gpu_nic_affinity_tests, err_buf);
+		unsetenv("FI_VERBS_AFFINITY_DEVICE");
+	}
 
 	if (failed > 0) {
 		printf("\nSummary: %d tests failed\n", failed);
