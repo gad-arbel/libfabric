@@ -246,6 +246,7 @@ unit_tests=(
 	"fi_mr_test"
 	"fi_cntr_test"
 	"fi_setopt_test"
+        "fi_nic_affinity_test"
 )
 
 regression_tests=(
