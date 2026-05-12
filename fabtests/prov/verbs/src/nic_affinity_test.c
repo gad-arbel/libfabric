@@ -34,6 +34,8 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include <rdma/fi_errno.h>
 
@@ -41,6 +43,9 @@
 #include "unit_common.h"
 
 #define OFI_CORE_PROV_ONLY      (1ULL << 59)
+#define MAX_NICS                64
+#define MAX_NIC_NAME_LEN        64
+#define MAX_NIC_LIST_SIZE       (MAX_NICS * (MAX_NIC_NAME_LEN + 1) + 16)
 #define TEST_PCI_ADDR           "0000:00:00.0"
 #define TEST_CONFIG_FILE        "/tmp/test_config.conf"
 
@@ -48,9 +53,12 @@
 	TEST_ENTRY(nic_affinity_##name, nic_affinity_##name##_desc)
 
 typedef int (*ft_nic_affinity_init)(struct fi_info *);
-typedef int (*ft_nic_affinity_test)(struct fi_info *);
+typedef int (*ft_nic_affinity_test)(char current_nics[][MAX_NIC_NAME_LEN]);
 
 static char err_buf[512];
+static int baseline_total_count;
+static int baseline_count;
+static char baseline_nics[MAX_NICS][MAX_NIC_NAME_LEN];
 
 static const char *get_nic_name(struct fi_info *info)
 {
@@ -134,9 +142,100 @@ static void cleanup_nic_affinity_test(void)
 	unsetenv("FI_VERBS_NIC_AFFINITY_CONFIG");
 }
 
+static int serialize_nic_list(struct fi_info *info)
+{
+	char buffer[MAX_NIC_LIST_SIZE];
+	struct fi_info *cur;
+	const char *name, *prev_name = NULL;
+	size_t offset = 0;
+        int total_count = 0;
+	int unique_count = 0;
+	int ret;
+
+	for (cur = info; cur; cur = cur->next) {
+                total_count++;
+
+		name = get_nic_name(cur);
+		if (!name)
+			continue;
+
+		if (prev_name && strcmp(name, prev_name) == 0)
+			continue;
+
+		if (strlen(name) >= MAX_NIC_NAME_LEN) {
+			sprintf(err_buf, "NIC name too long: %s (max %d)", name,
+				MAX_NIC_NAME_LEN - 1);
+			return -FI_ENOMEM;
+		}
+
+		ret = snprintf(buffer + offset, sizeof(buffer) - offset, "%s,", name);
+		if (ret < 0 || (size_t)ret >= sizeof(buffer) - offset) {
+			sprintf(err_buf, "Buffer overflow serializing NIC list");
+			return -FI_ENOMEM;
+		}
+		offset += ret;
+		unique_count++;
+		prev_name = name;
+	}
+
+	if (offset > 0)
+		buffer[offset - 1] = '\0';
+
+	printf("%d:%d:%s", total_count, unique_count, buffer);
+	fflush(stdout);
+	return 0;
+}
+
+static int deserialize_nic_list(const char *serialized, char nics[][MAX_NIC_NAME_LEN],
+				int *total_count, int *unique_count)
+{
+	char buffer[MAX_NIC_LIST_SIZE];
+	char *token, *saveptr;
+	char *first_colon, *second_colon;
+	int i = 0;
+
+	first_colon = strchr(serialized, ':');
+	if (!first_colon) {
+		sprintf(err_buf, "Invalid format in serialized output");
+		return -FI_EINVAL;
+	}
+
+	second_colon = strchr(first_colon + 1, ':');
+	if (!second_colon) {
+		sprintf(err_buf, "Invalid format in serialized output (missing second colon)");
+		return -FI_EINVAL;
+	}
+
+	*total_count = atoi(serialized);
+	*unique_count = atoi(first_colon + 1);
+
+	strncpy(buffer, second_colon + 1, sizeof(buffer) - 1);
+	buffer[sizeof(buffer) - 1] = '\0';
+
+	token = strtok_r(buffer, ",", &saveptr);
+	while (token && i < MAX_NICS) {
+		strncpy(nics[i], token, MAX_NIC_NAME_LEN);
+		i++;
+		token = strtok_r(NULL, ",", &saveptr);
+	}
+
+	if (i != *unique_count) {
+		sprintf(err_buf, "Unique count mismatch: expected %d, got %d", *unique_count, i);
+		return -FI_EINVAL;
+	}
+
+	return 0;
+}
+
 /*
  * Init functions
  */
+static int init_none(struct fi_info *hints)
+{
+	setenv("FI_VERBS_NIC_AFFINITY_POLICY", "none", 1);
+	return 0;
+}
+
 static int init_manual(struct fi_info *hints)
 {
 	int ret;
@@ -221,47 +320,24 @@ static int init_invalid(struct fi_info *hints)
 }
 
 /*
- * Check functions
+ * Check functions - run in parent process after receiving serialized NIC lists
  */
-static int check_count_and_grouping(struct fi_info *original_info, struct fi_info *policy_info)
+static int check_same_nics(char policy_nics[][MAX_NIC_NAME_LEN])
 {
-	struct fi_info *original_cur;
-	struct fi_info *affinity_cur;
-	const char *nic_to_find;
-	size_t original_count;
-	size_t policy_count;
+	int i, j;
+	int found;
 
-	original_cur = original_info;
-	while (original_cur) {
-		nic_to_find = get_nic_name(original_cur);
-		if (!nic_to_find) {
-			original_cur = original_cur->next;
-			continue;
-		}
-
-		original_count = 0;
-		while (original_cur && get_nic_name(original_cur) &&
-		       strcmp(get_nic_name(original_cur), nic_to_find) == 0) {
-			original_count++;
-			original_cur = original_cur->next;
-		}
-
-		for (affinity_cur = policy_info; affinity_cur; affinity_cur = affinity_cur->next) {
-			if (get_nic_name(affinity_cur) &&
-			    strcmp(get_nic_name(affinity_cur), nic_to_find) == 0)
+	for (i = 0; i < baseline_count; i++) {
+		found = 0;
+		for (j = 0; j < baseline_count; j++) {
+			if (strcmp(baseline_nics[i], policy_nics[j]) == 0) {
+				found = 1;
 				break;
+			}
 		}
-
-		policy_count = 0;
-		while (affinity_cur && get_nic_name(affinity_cur) &&
-		       strcmp(get_nic_name(affinity_cur), nic_to_find) == 0) {
-			policy_count++;
-			affinity_cur = affinity_cur->next;
-		}
-
-		if (original_count != policy_count) {
-			sprintf(err_buf, "NIC %s: original has %zu entries, policy has %zu consecutive entries",
-				nic_to_find, original_count, policy_count);
+		if (!found) {
+			sprintf(err_buf, "NIC %s from baseline not found in policy list",
+				baseline_nics[i]);
 			return EXIT_FAILURE;
 		}
 	}
@@ -269,150 +345,140 @@ static int check_count_and_grouping(struct fi_info *original_info, struct fi_inf
 	return 0;
 }
 
-static int compare_lists_same_order(struct fi_info *list1, struct fi_info *list2)
+static int check_identical_list(char current_nics[][MAX_NIC_NAME_LEN])
 {
-	struct fi_info *cur1;
-	struct fi_info *cur2;
-	const char *name1;
-	const char *name2;
+	int i;
 
-	cur1 = list1;
-	cur2 = list2;
-	while (cur1 && cur2) {
-		name1 = get_nic_name(cur1);
-		name2 = get_nic_name(cur2);
-
-		if (name1 && name2 && strcmp(name1, name2) != 0) {
-			sprintf(err_buf, "Order mismatch: %s != %s", name1, name2);
+	for (i = 0; i < baseline_count; i++) {
+		if (strcmp(baseline_nics[i], current_nics[i]) != 0) {
+			sprintf(err_buf, "NIC list mismatch at index %d: baseline=%s, current=%s",
+				i, baseline_nics[i], current_nics[i]);
 			return EXIT_FAILURE;
 		}
-
-		cur1 = cur1->next;
-		cur2 = cur2->next;
-	}
-
-	if (cur1 || cur2) {
-		sprintf(err_buf, "Different number of entries");
-		return EXIT_FAILURE;
 	}
 
 	return 0;
 }
 
-static int check_no_interference(struct fi_info *hints)
+static void getinfo_wrapper(void)
 {
-	struct fi_info *original_info = NULL;
-	struct fi_info *policy_info1 = NULL;
-	struct fi_info *policy_info2 = NULL;
+	struct fi_info *info = NULL;
 	int ret;
 
-	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, OFI_CORE_PROV_ONLY, hints, &policy_info1);
-	if (ret) {
-		FT_UNIT_STRERR(err_buf, "fi_getinfo with affinity policy failed", ret);
-		return ret;
-	}
-
-	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, OFI_CORE_PROV_ONLY, hints, &policy_info2);
-	if (ret) {
-		FT_UNIT_STRERR(err_buf, "fi_getinfo with affinity policy (second call) failed", ret);
-		fi_freeinfo(policy_info1);
-		return ret;
-	}
-
-	ret = compare_lists_same_order(policy_info1, policy_info2);
-	if (ret)
-		goto cleanup;
-
-	unsetenv("FI_VERBS_NIC_AFFINITY_POLICY");
-	unsetenv("FI_VERBS_AFFINITY_DEVICE");
-
-	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, OFI_CORE_PROV_ONLY, hints, &original_info);
-	if (ret) {
-		FT_UNIT_STRERR(err_buf, "fi_getinfo with policy=none failed", ret);
-		goto cleanup;
-	}
-
-	ret = check_count_and_grouping(original_info, policy_info1);
-
-cleanup:
-	fi_freeinfo(original_info);
-	fi_freeinfo(policy_info1);
-	fi_freeinfo(policy_info2);
-
-	cleanup_nic_affinity_test();
-
-	return ret;
-}
-
-static int check_identical_list(struct fi_info *hints)
-{
-	struct fi_info *original_info = NULL;
-	struct fi_info *policy_info = NULL;
-	int ret;
-
-	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, OFI_CORE_PROV_ONLY, hints, &policy_info);
-	if (ret) {
-		FT_UNIT_STRERR(err_buf, "fi_getinfo with affinity policy failed", ret);
-		cleanup_nic_affinity_test();
-		return ret;
-	}
-
-	unsetenv("FI_VERBS_NIC_AFFINITY_POLICY");
-	unsetenv("FI_VERBS_AFFINITY_DEVICE");
-
-	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, OFI_CORE_PROV_ONLY, hints, &original_info);
-	if (ret) {
-		FT_UNIT_STRERR(err_buf, "fi_getinfo with policy=none failed", ret);
-		fi_freeinfo(policy_info);
-		cleanup_nic_affinity_test();
-		return ret;
-	}
-
-	ret = compare_lists_same_order(original_info, policy_info);
-
-	fi_freeinfo(original_info);
-	fi_freeinfo(policy_info);
-
-	cleanup_nic_affinity_test();
-
-	return ret;
-}
-
-/*
- * nic affinity test
- */
-static int nic_affinity_unit_test(ft_nic_affinity_init init,
-				   ft_nic_affinity_test test)
-{
-	struct fi_info *info = NULL, *test_hints = NULL;
-	int ret;
-
-	test_hints = fi_dupinfo(hints);
-	if (!test_hints)
-		return -FI_ENOMEM;
-
-	if (init) {
-		ret = init(test_hints);
-		if (ret)
-			goto out;
-	}
-
-	if (test) {
-		ret = test(test_hints);
-	} else {
-		ret = fi_getinfo(FT_FIVERSION, NULL, NULL, 0,
-				 test_hints, &info);
-	}
+	ret = fi_getinfo(FT_FIVERSION, NULL, NULL, OFI_CORE_PROV_ONLY,
+			 hints, &info);
 	if (ret) {
 		sprintf(err_buf, "fi_getinfo returned %d - %s",
 			-ret, fi_strerror(-ret));
-		goto out;
+		fprintf(stderr, "%s", err_buf);
+		_exit(EXIT_FAILURE);
 	}
 
-out:
-	fi_freeinfo(test_hints);
-	fi_freeinfo(info);
+	ret = serialize_nic_list(info);
+	if (ret) {
+		fprintf(stderr, "%s", err_buf);
+		_exit(EXIT_FAILURE);
+	}
+
+        fi_freeinfo(info);
+	_exit(EXIT_SUCCESS);
+}
+
+static int get_nic_list(char nics_out[][MAX_NIC_NAME_LEN],
+			int *total_count_out, int *unique_count_out)
+{
+	int stdout_pipe[2], stderr_pipe[2];
+	pid_t pid;
+        char buffer[MAX_NIC_LIST_SIZE];
+	ssize_t n;
+	int status;
+	int ret;
+
+	if (pipe(stdout_pipe) < 0 || pipe(stderr_pipe) < 0) {
+		sprintf(err_buf, "pipe() failed");
+		return -FI_EIO;
+	}
+
+	pid = fork();
+	if (pid < 0) {
+		close(stdout_pipe[0]);
+		close(stdout_pipe[1]);
+		close(stderr_pipe[0]);
+		close(stderr_pipe[1]);
+		sprintf(err_buf, "fork() failed");
+		return -FI_EIO;
+	}
+
+	if (pid == 0) {
+		close(stdout_pipe[0]);
+		close(stderr_pipe[0]);
+
+		dup2(stdout_pipe[1], STDOUT_FILENO);
+		dup2(stderr_pipe[1], STDERR_FILENO);
+		close(stdout_pipe[1]);
+		close(stderr_pipe[1]);
+
+		getinfo_wrapper();
+	}
+
+	close(stdout_pipe[1]);
+	close(stderr_pipe[1]);
+
+	if (waitpid(pid, &status, 0) < 0) {
+		sprintf(err_buf, "waitpid() failed");
+		return -FI_EIO;
+	}
+
+	if (!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS)
+		return -FI_EOTHER;
+        
+        n = read(stdout_pipe[0], buffer, sizeof(buffer) - 1);
+	buffer[n > 0 ? n : 0] = '\0';
+	n = read(stderr_pipe[0], err_buf, sizeof(err_buf) - 1);
+	err_buf[n > 0 ? n : 0] = '\0';
+	ret = deserialize_nic_list(buffer, nics_out, total_count_out, unique_count_out);
+	if (ret) return ret;
+
+	close(stdout_pipe[0]);
+	close(stderr_pipe[0]);
+
 	return ret;
+}
+
+static int nic_affinity_unit_test(ft_nic_affinity_init init,
+				   ft_nic_affinity_test test)
+{
+	char current_nics[MAX_NICS][MAX_NIC_NAME_LEN];
+	int current_total_count, current_count;
+	int ret;
+
+	if (init) {
+		ret = init(hints);
+		if (ret) return ret;
+	}
+
+	ret = get_nic_list(current_nics, &current_total_count, &current_count);
+	if (ret) return ret;
+
+	if (baseline_total_count != current_total_count) {
+		sprintf(err_buf, "Total NIC count mismatch: baseline has %d, current has %d",
+			baseline_total_count, current_total_count);
+		return EXIT_FAILURE;
+	}
+
+        if (baseline_count != current_count) {
+		sprintf(err_buf, "Unique NIC count mismatch: baseline has %d, current has %d",
+			baseline_count, current_count);
+		return EXIT_FAILURE;
+	}
+
+	if (test) {
+		ret = test(current_nics);
+		if (ret) return ret;
+	}
+
+        cleanup_nic_affinity_test();
+	return 0;
 }
 
 #define nic_affinity_test(name, desc, init, test)			\
@@ -431,9 +497,12 @@ fail:									\
 /*
  * Tests:
  */
+nic_affinity_test(none_sanity, "Test none policy for sanity",
+		  init_none,
+		  check_identical_list)
 nic_affinity_test(manual_sanity, "Test manual policy for sanity",
 		  init_manual,
-		  check_no_interference)
+		  check_same_nics)
 nic_affinity_test(manual_no_device, "Test manual policy without device",
 		  init_manual_no_device,
 		  check_identical_list)
@@ -448,7 +517,7 @@ nic_affinity_test(manual_malformed_config, "Test manual policy with malformed co
 		  check_identical_list)
 nic_affinity_test(auto_sanity, "Test auto policy for sanity",
 		  init_auto,
-		  check_no_interference)
+		  check_same_nics)
 nic_affinity_test(auto_no_device, "Test auto policy without device",
 		  init_auto_no_device,
 		  check_identical_list)
@@ -470,10 +539,11 @@ static void usage(char *name)
 
 int main(int argc, char **argv)
 {
-	int failed, cleanup_ret;
+	int failed, cleanup_ret, ret;
 	int op;
 
 	struct test_entry nic_affinity_tests[] = {
+                TEST_ENTRY_NIC_AFFINITY(none_sanity),
 		TEST_ENTRY_NIC_AFFINITY(manual_sanity),
 		TEST_ENTRY_NIC_AFFINITY(manual_no_device),
 		TEST_ENTRY_NIC_AFFINITY(manual_invalid_device),
@@ -509,6 +579,20 @@ int main(int argc, char **argv)
 	}
 
 	hints->mode = ~0;
+
+	cleanup_nic_affinity_test();
+	ret = get_nic_list(baseline_nics, &baseline_total_count, &baseline_count);
+	if (ret) {
+		fprintf(stderr, "Failed to capture baseline: %s\n", err_buf);
+		fi_freeinfo(hints);
+		return EXIT_FAILURE;
+	}
+
+	if (baseline_count == 0) {
+		fprintf(stderr, "No NICs found in baseline\n");
+		fi_freeinfo(hints);
+		return EXIT_FAILURE;
+	}
 
 	setenv("FI_VERBS_AFFINITY_DEVICE", TEST_PCI_ADDR, 1);
 	failed = run_tests(nic_affinity_tests, err_buf);
