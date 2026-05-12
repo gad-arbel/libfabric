@@ -391,18 +391,6 @@ static int nic_affinity_unit_test(ft_nic_affinity_init init,
 	if (!test_hints)
 		return -FI_ENOMEM;
 
-	if (!test_hints->fabric_attr->prov_name) {
-		test_hints->fabric_attr->prov_name = strdup("verbs");
-		if (!test_hints->fabric_attr->prov_name) {
-			ret = -FI_ENOMEM;
-			goto out;
-		}
-	} else if (strcmp(test_hints->fabric_attr->prov_name, "verbs") != 0) {
-		sprintf(err_buf, "GPU-NIC affinity is a verbs-specific feature");
-		ret = -FI_ENOSYS;
-		goto out;
-	}
-
 	if (init) {
 		ret = init(test_hints);
 		if (ret)
@@ -473,7 +461,11 @@ nic_affinity_test(invalid_policy, "Test invalid policy fallback to none",
 
 static void usage(char *name)
 {
-	ft_unit_usage(name, "Unit tests for GPU-NIC affinity");
+	fprintf(stderr, "Usage:\n");
+	fprintf(stderr, "  %s [-h]\n\n", name);
+	fprintf(stderr, "Unit tests for verbs GPU-NIC affinity feature\n\n");
+	fprintf(stderr, "Options:\n");
+	fprintf(stderr, "  -h    display this help output\n");
 }
 
 int main(int argc, char **argv)
@@ -500,16 +492,20 @@ int main(int argc, char **argv)
 	if (!hints)
 		return EXIT_FAILURE;
 
-	while ((op = getopt(argc, argv, INFO_OPTS "h")) != -1) {
+	while ((op = getopt(argc, argv, "h")) != -1) {
 		switch (op) {
-		default:
-			ft_parseinfo(op, optarg, hints, &opts);
-			break;
 		case '?':
 		case 'h':
+		default:
 			usage(argv[0]);
 			return EXIT_FAILURE;
 		}
+	}
+
+	hints->fabric_attr->prov_name = strdup("verbs");
+	if (!hints->fabric_attr->prov_name) {
+		fi_freeinfo(hints);
+		return EXIT_FAILURE;
 	}
 
 	hints->mode = ~0;

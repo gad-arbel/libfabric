@@ -246,7 +246,6 @@ unit_tests=(
 	"fi_mr_test"
 	"fi_cntr_test"
 	"fi_setopt_test"
-        "fi_nic_affinity_test"
 )
 
 regression_tests=(
@@ -300,6 +299,10 @@ prov_efa_tests=( \
 	"fi_efa_rnr_queue_resend -c 1 -o write -U -S 4"
 	"fi_efa_rnr_queue_resend -c 1 -o write -U -S 1048576"
 	"fi_efa_rnr_queue_resend -c 1 -A write -U -S 4"
+)
+
+prov_verbs_tests=( \
+	"fi_nic_affinity_test"
 )
 
 function errcho {
@@ -769,6 +772,12 @@ function multinode_test {
 
 function prov_efa_test {
 	for test in "${prov_efa_tests[@]}"; do
+		cs_test "$test"
+	done
+}
+
+function prov_verbs_test {
+	for test in "${prov_verbs_tests[@]}"; do
 		cs_test "$test"
 	done
 }

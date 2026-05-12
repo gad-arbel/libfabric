@@ -65,7 +65,6 @@ bin_PROGRAMS = \
 	unit/fi_getinfo_test \
 	unit/fi_setopt_test \
 	unit/fi_check_hmem \
-	unit/fi_nic_affinity_test \
 	ubertest/fi_ubertest	\
 	multinode/fi_multinode	\
 	multinode/fi_multinode_coll \
@@ -497,11 +496,6 @@ unit_fi_check_hmem_LDADD = libfabtests.la
 unit_fi_check_hmem_CFLAGS = \
 	$(AM_CFLAGS)
 
-unit_fi_nic_affinity_test_SOURCES = \
-	unit/nic_affinity_test.c \
-	$(unit_srcs)
-unit_fi_nic_affinity_test_LDADD = libfabtests.la
-
 ubertest_fi_ubertest_SOURCES = \
 	ubertest/fabtest.h \
 	ubertest/uber.c \
@@ -684,7 +678,6 @@ dummy_man_pages = \
 	man/man1/fi_eq_test.1 \
 	man/man1/fi_getinfo_test.1 \
 	man/man1/fi_mr_test.1 \
-	man/man1/fi_nic_affinity_test.1 \
 	man/man1/fi_flood.1 \
 	man/man1/fi_rdm_multi_client.1 \
 	man/man1/fi_ubertest.1 \
@@ -704,6 +697,7 @@ include prov/efa/Makefile.include
 if !MACOS
 include prov/lpp/Makefile.include
 endif
+include prov/verbs/Makefile.include
 
 man_MANS = $(real_man_pages) $(dummy_man_pages)
 
