@@ -1,0 +1,54 @@
+Machine 
+  Package L#0 
+        NUMANode L#0 
+        HostBridge L#0 
+          PCIBridge L#1 (busid=0000:00:13.0 id=8086:1bb3 class=0604(PCIBridge) link=0.62GB/s buses=0000:[01-02])
+            PCIBridge L#2 (busid=0000:01:00.0 id=1a03:1150 class=0604(PCIBridge) link=0.62GB/s buses=0000:[02-02])
+              PCI L#0 (busid=0000:02:00.0 id=1a03:2000 class=0300(VGA))
+          PCI L#1 (busid=0000:00:17.0 id=8086:1ba2 class=0106(SATA))
+          PCI L#2 (busid=0000:00:18.0 id=8086:1bf2 class=0106(SATA))
+          PCI L#3 (busid=0000:00:19.0 id=8086:1bd2 class=0106(SATA))
+        HostBridge L#3 
+          PCIBridge L#4 (busid=0000:31:01.0 id=8086:352a class=0604(PCIBridge) link=2.46GB/s buses=0000:[32-32])
+            PCI L#4 (busid=0000:32:00.0 id=8086:1521 class=0200(Ethernet) link=2.46GB/s PCISlot=0)
+              Network L#1  "eth0"
+            PCI L#5 (busid=0000:32:00.1 id=8086:1521 class=0200(Ethernet) link=2.46GB/s PCISlot=0)
+              Network L#2  "eth1"
+            PCI L#6 (busid=0000:32:00.2 id=8086:1521 class=0200(Ethernet) link=2.46GB/s PCISlot=0)
+              Network L#3  "eth2"
+            PCI L#7 (busid=0000:32:00.3 id=8086:1521 class=0200(Ethernet) link=2.46GB/s PCISlot=0)
+              Network L#4  "eth3"
+        HostBridge L#5 
+          PCI L#8 (busid=0000:70:00.0 id=8086:4940 class=0b40(Co-Processor))
+        HostBridge L#6 
+          PCI L#9 (busid=0000:72:00.0 id=8086:2710 class=0b40(Co-Processor))
+        NUMANode L#1 
+        HostBridge L#7 
+          PCIBridge L#8 (busid=0000:44:01.0 id=8086:352a class=0604(PCIBridge) link=31.51GB/s buses=0000:[45-45])
+            PCI L#10 (busid=0000:45:00.0 id=15b3:101b class=0200(Ethernet) link=31.51GB/s PCISlot=2)
+              Network L#5  "roce0"
+              OpenFabrics L#6  "mlx5_0"
+            PCI L#11 (busid=0000:45:00.1 id=15b3:101b class=0200(Ethernet) link=31.51GB/s PCISlot=2)
+              Network L#7  "roce1"
+              OpenFabrics L#8  "mlx5_1"
+  Package L#1 
+        NUMANode L#2 
+        HostBridge L#9 
+          PCIBridge L#10 (busid=0000:97:01.0 id=8086:352a class=0604(PCIBridge) link=31.51GB/s buses=0000:[98-98])
+            PCI L#12 (busid=0000:98:00.0 id=15b3:101b class=0200(Ethernet) link=31.51GB/s PCISlot=3)
+              Network L#9  "roce2"
+              OpenFabrics L#10  "mlx5_2"
+            PCI L#13 (busid=0000:98:00.1 id=15b3:101b class=0200(Ethernet) link=31.51GB/s PCISlot=3)
+              Network L#11  "roce3"
+              OpenFabrics L#12  "mlx5_3"
+        HostBridge L#11 
+          PCI L#14 (busid=0000:ed:00.0 id=8086:4940 class=0b40(Co-Processor))
+        HostBridge L#12 
+          PCI L#15 (busid=0000:ef:00.0 id=8086:2710 class=0b40(Co-Processor))
+        NUMANode L#3 
+        HostBridge L#13 
+          PCIBridge L#14 (busid=0000:bf:01.0 id=8086:352a class=0604(PCIBridge) link=31.51GB/s buses=0000:[c0-c1])
+            PCI L#16 (busid=0000:c0:00.0 id=8086:1592 class=0200(Ethernet) link=31.51GB/s PCISlot=5)
+              Network L#13  "cvl0"
+            PCI L#17 (busid=0000:c0:00.1 id=8086:1592 class=0200(Ethernet) link=31.51GB/s PCISlot=5)
+              Network L#14  "eth6"

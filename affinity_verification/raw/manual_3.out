@@ -1,0 +1,864 @@
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_MSG
+    protocol: FI_PROTO_RDMA_CM_IB_RC
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2-dgram
+    version: 205.0
+    type: FI_EP_DGRAM
+    protocol: FI_PROTO_IB_UD
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxm
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXM
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_3-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_0-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_1-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
+provider: verbs;ofi_rxd
+    fabric: IB-0xfe80000000000000
+    domain: mlx5_2-dgram
+    version: 205.0
+    type: FI_EP_RDM
+    protocol: FI_PROTO_RXD
