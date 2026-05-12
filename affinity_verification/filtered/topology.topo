@@ -1,0 +1,47 @@
+Machine 
+  Package L#0 
+        NUMANode L#0 
+        HostBridge L#0 
+          PCIBridge L#1 (busid=0000:00:0d.0 id=8086:1bbd class=0604(PCIBridge) link=0.62GB/s buses=0000:[01-02])
+            PCIBridge L#2 (busid=0000:01:00.0 id=1a03:1150 class=0604(PCIBridge) link=0.62GB/s buses=0000:[02-02])
+              PCI L#0 (busid=0000:02:00.0 id=1a03:2000 class=0300(VGA))
+          PCI L#1 (busid=0000:00:17.0 id=8086:1ba2 class=0106(SATA))
+          PCI L#2 (busid=0000:00:18.0 id=8086:1bf2 class=0106(SATA))
+        HostBridge L#3 
+          PCIBridge L#4 (busid=0000:15:03.0 id=8086:352b class=0604(PCIBridge) link=3.94GB/s buses=0000:[16-16])
+            PCI L#3 (busid=0000:16:00.0 id=8086:15ff class=0200(Ethernet) link=3.94GB/s PCISlot=0)
+              Network L#2  "eth0"
+        HostBridge L#5 
+          PCIBridge L#6 (busid=0000:26:01.0 id=8086:352a class=0604(PCIBridge) link=63.02GB/s buses=0000:[27-2a])
+            PCIBridge L#7 (busid=0000:27:00.0 id=8086:0bdd class=0604(PCIBridge) link=63.02GB/s buses=0000:[28-2a] PCISlot=0-1)
+              PCIBridge L#8 (busid=0000:28:01.0 id=8086:0bde class=0604(PCIBridge) link=0.25GB/s buses=0000:[29-29])
+                PCI L#4 (busid=0000:29:00.0 id=8086:0bd5 class=0380(Display) link=0.25GB/s)
+        HostBridge L#9 
+          PCIBridge L#10 (busid=0000:37:01.0 id=8086:352a class=0604(PCIBridge) link=63.02GB/s buses=0000:[38-3b])
+            PCIBridge L#11 (busid=0000:38:00.0 id=8086:0bdd class=0604(PCIBridge) link=63.02GB/s buses=0000:[39-3b] PCISlot=0-2)
+              PCIBridge L#12 (busid=0000:39:01.0 id=8086:0bde class=0604(PCIBridge) link=0.25GB/s buses=0000:[3a-3a])
+                PCI L#5 (busid=0000:3a:00.0 id=8086:0bd5 class=0380(Display) link=0.25GB/s)
+        NUMANode L#1 
+        HostBridge L#13 
+          PCIBridge L#14 (busid=0000:59:01.0 id=8086:352a class=0604(PCIBridge) link=63.02GB/s buses=0000:[5a-5a])
+            PCI L#6 (busid=0000:5a:00.0 id=15b3:1021 class=0207(InfiniBand) link=63.02GB/s PCISlot=801)
+              Network L#3  "ib0"
+              OpenFabrics L#4  "mlx5_0"
+  Package L#1 
+        NUMANode L#2 
+        HostBridge L#15 
+          PCIBridge L#16 (busid=0000:97:01.0 id=8086:352a class=0604(PCIBridge) link=63.02GB/s buses=0000:[98-9b])
+            PCIBridge L#17 (busid=0000:98:00.0 id=8086:0bdd class=0604(PCIBridge) link=63.02GB/s buses=0000:[99-9b] PCISlot=0-3)
+              PCIBridge L#18 (busid=0000:99:01.0 id=8086:0bde class=0604(PCIBridge) link=0.25GB/s buses=0000:[9a-9a])
+                PCI L#7 (busid=0000:9a:00.0 id=8086:0bd5 class=0380(Display) link=0.25GB/s)
+        NUMANode L#3 
+        HostBridge L#19 
+          PCIBridge L#20 (busid=0000:c7:01.0 id=8086:352a class=0604(PCIBridge) link=63.02GB/s buses=0000:[c8-cb])
+            PCIBridge L#21 (busid=0000:c8:00.0 id=8086:0bdd class=0604(PCIBridge) link=63.02GB/s buses=0000:[c9-cb] PCISlot=0-4)
+              PCIBridge L#22 (busid=0000:c9:01.0 id=8086:0bde class=0604(PCIBridge) link=0.25GB/s buses=0000:[ca-ca])
+                PCI L#8 (busid=0000:ca:00.0 id=8086:0bd5 class=0380(Display) link=0.25GB/s)
+        HostBridge L#23 
+          PCIBridge L#24 (busid=0000:d7:01.0 id=8086:352a class=0604(PCIBridge) link=63.02GB/s buses=0000:[d8-d8])
+            PCI L#9 (busid=0000:d8:00.0 id=15b3:1021 class=0207(InfiniBand) link=63.02GB/s PCISlot=785)
+              Network L#5  "ib1"
+              OpenFabrics L#6  "mlx5_1"

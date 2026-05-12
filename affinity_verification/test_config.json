@@ -1,0 +1,103 @@
+{
+  "tests": [
+    {
+      "name": "baseline",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "",
+        "FI_VERBS_AFFINITY_DEVICE": "",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3"]
+      }
+    },
+    {
+      "name": "none",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "none",
+        "FI_VERBS_AFFINITY_DEVICE": "",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3"]
+      }
+    },
+    {
+      "name": "manual_2",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "manual",
+        "FI_VERBS_AFFINITY_DEVICE": "0000:45:00.0",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": "affinity_verification/conf/config_0_2.conf"
+      },
+      "expected": {
+        "nic_order": ["mlx5_2", "mlx5_0", "mlx5_1", "mlx5_3"]
+      }
+    },
+    {
+      "name": "manual_3",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "manual",
+        "FI_VERBS_AFFINITY_DEVICE": "0000:45:00.0",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": "affinity_verification/conf/config_0_3.conf"
+      },
+      "expected": {
+        "nic_order": ["mlx5_3", "mlx5_0", "mlx5_1", "mlx5_2"]
+      }
+    },
+    {
+      "name": "auto_nodevice",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "auto",
+        "FI_VERBS_AFFINITY_DEVICE": "",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3"]
+      }
+    },
+    {
+      "name": "auto_mlx5_0",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "auto",
+        "FI_VERBS_AFFINITY_DEVICE": "0000:45:00.1",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_0", "mlx5_1", "mlx5_2", "mlx5_3"]
+      }
+    },
+    {
+      "name": "auto_mlx5_1",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "auto",
+        "FI_VERBS_AFFINITY_DEVICE": "0000:45:00.0",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_1", "mlx5_0", "mlx5_2", "mlx5_3"]
+      }
+    },
+    {
+      "name": "auto_mlx5_2",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "auto",
+        "FI_VERBS_AFFINITY_DEVICE": "0000:98:00.1",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_2", "mlx5_3", "mlx5_0", "mlx5_1"]
+      }
+    },
+    {
+      "name": "auto_mlx5_3",
+      "env": {
+        "FI_VERBS_NIC_AFFINITY_POLICY": "auto",
+        "FI_VERBS_AFFINITY_DEVICE": "0000:98:00.0",
+        "FI_VERBS_NIC_AFFINITY_CONFIG": ""
+      },
+      "expected": {
+        "nic_order": ["mlx5_3", "mlx5_2", "mlx5_0", "mlx5_1"]
+      }
+    }
+  ]
+}
