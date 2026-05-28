@@ -18,7 +18,7 @@ def checkout_ci() {
   sh """
     rm -rf ${env.CUSTOM_WORKSPACE}/ci
     mkdir ${env.CUSTOM_WORKSPACE}/ci
-    git clone --recurse-submodules ${env.CI} ${env.CUSTOM_WORKSPACE}/ci
+    git clone --recurse-submodules ${env.GAD_CI} ${env.CUSTOM_WORKSPACE}/ci
   """
 }
 
