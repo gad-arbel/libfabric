@@ -176,15 +176,15 @@ pipeline {
             }
           }
         }
-        stage ('level-zero') {
-          agent { node { label 'level-zero' } }
-          options { skipDefaultCheckout() }
-          steps {
-            script {
-              initialize()
-            }
-          }
-        }
+        // stage ('level-zero') {
+        //   agent { node { label 'level-zero' } }
+        //   options { skipDefaultCheckout() }
+        //   steps {
+        //     script {
+        //       initialize()
+        //     }
+        //   }
+        // }
       }
     }
     stage ('opt_out') {
@@ -216,22 +216,22 @@ pipeline {
             }
           }
         }
-        stage ('level-zero') {
-          agent { node { label 'level-zero' } }
-          options { skipDefaultCheckout() }
-          steps {
-            script {
-              withEnv(["TARGET=${CTARGET}"]) {
-                dir (CI_LOCATION) {
-                  def ret = run_red("${env.LEVEL_ZERO_CONFIG}")
-                  send_logs("${env.CBJ_ADDR}", "${env.CBJ_KEY}",
-                            "${env.LOG_DIR}", "${env.LOG_DIR}")
-                  return ret
-                }
-              }
-            }
-          }
-        }
+        // stage ('level-zero') {
+        //   agent { node { label 'level-zero' } }
+        //   options { skipDefaultCheckout() }
+        //   steps {
+        //     script {
+        //       withEnv(["TARGET=${CTARGET}"]) {
+        //         dir (CI_LOCATION) {
+        //           def ret = run_red("${env.LEVEL_ZERO_CONFIG}")
+        //           send_logs("${env.CBJ_ADDR}", "${env.CBJ_KEY}",
+        //                     "${env.LOG_DIR}", "${env.LOG_DIR}")
+        //           return ret
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
       }
     }
     stage ('Summary') {
@@ -252,12 +252,12 @@ pipeline {
           CI_summarize()
         }
       }
-      node ('level-zero') {
-        dir("${env.WORKSPACE}") { deleteDir() }
-        dir("${env.WORKSPACE}@tmp") { deleteDir() }
-      }
-      dir("${env.WORKSPACE}") { deleteDir() }
-      dir("${env.WORKSPACE}@tmp") { deleteDir() }
+//       node ('level-zero') {
+//         dir("${env.WORKSPACE}") { deleteDir() }
+//         dir("${env.WORKSPACE}@tmp") { deleteDir() }
+//       }
+//       dir("${env.WORKSPACE}") { deleteDir() }
+//       dir("${env.WORKSPACE}@tmp") { deleteDir() }
     }
   }
 }
